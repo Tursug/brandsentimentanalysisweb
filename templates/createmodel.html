@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+    <head>
+
+        <title>Brand Sentiment Analysis</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/bootstrap.min.css') }}">
+        <script src="{{ url_for('static', filename='bootstrap/jquery-3.4.1.slim.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='bootstrap/popper.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='bootstrap/bootstrap.min.js') }}"></script>
+
+        <style>
+            .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #f5f5f5;
+            text-align: center;
+                }
+        </style>
+
+        <script>
+        $(document).ready(function(){
+
+            $('.custom-file-input').on('change', function() {
+                let filename = $(this).val().split('\\').pop();
+                $(this).next('.custom-file-label').addClass("selected").html(filename);
+            });
+
+            $("#btnFetch").click(function() {
+      // disable button
+
+      // add spinner to button
+      $(this).html(
+        `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+      );
+    });
+        });
+        </script>
+
+    </head>
+
+    <body>
+
+        <!--Navigation-->
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand" href="/">
+                Brand Sentiment Analysis
+            </a>
+        </nav>
+
+        <!--Container-->
+        <div class="container">
+
+              <div class="row">
+
+                  <div class="col">
+
+                  </div>
+
+
+                    <div class="col">
+
+                        <br><h2 class="text-center">Create Model</h2>
+
+                            <form action="/createmodel" method="post" enctype=multipart/form-data>
+
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
+                                </div>
+
+                                <div class="row">
+                                     <div class="form-group col-md-6">
+                                         <label for="numberofwords">Number of words</label>
+                                        <input type="number" class="form-control" id="numberofwords" name="numberofwords" value="5000" required>
+                                     </div>
+
+                                     <div class="form-group col-md-6">
+                                         <label for="padlength">Pad Length</label>
+                                         <input type="number" class="form-control" id="padlength" name="padlength" value="32" required>
+                                     </div>
+                                <!--
+                                    <div class="form-group col-md-4">
+                                         <label for="hiddenlayers">Hidden Layers</label>
+                                        <input type="number" class="form-control" id="hiddenlayers" name="hiddenlayers" placeholder="3" required>
+                                     </div>
+                                 -->
+                                </div>
+
+                                <div class="row">
+                                     <div class="form-group col-md-6">
+                                         <label for="epoch">Epoch</label>
+                                        <input type="number" class="form-control" id="epoch" name="epoch" value="8" required>
+                                     </div>
+
+                                      <div class="form-group col-md-6">
+                                          <label for="batchsize">Batch Size</label>
+                                          <input type="number" class="form-control" id="batchsize" name="batchsize" value="32" required>
+                                      </div>
+                                </div><br>
+
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" name=csvfile class="custom-file-input" id="csvfile" required>
+                                        <label class="custom-file-label text-truncate" for="csvfile">{% if filename != "" %}{{filename}}{% else %} Choose CSV {% endif %}</label>
+                                    </div>
+                                </div>
+
+                                <br>
+
+                                <input class="btn btn-outline-secondary btn-block" type="submit" value="Create & Download" id="btnFetch">
+
+                            </form>
+
+                            <br>
+
+                            {% with messages = get_flashed_messages() %}
+                                {% if messages != "File Uploaded" %}
+                                    {% for message in messages %}
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <span>{{message}}</span>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    {% endfor%}
+                                {% endif %}
+                            {% endwith %}
+
+                    </div>
+
+              </div>
+        </div>
+
+        <!--Footer-->
+        <div class="footer">
+            <div class="text-center py-3">© 2019 Copyright: BrandSentimentAnalysis</div>
+        </div>
+
+    </body>
+</html>
